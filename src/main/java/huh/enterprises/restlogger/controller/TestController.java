@@ -24,19 +24,19 @@ public class TestController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity createUsers(@RequestBody User user) {
+    public ResponseEntity createUsers(@RequestBody Post user) {
         return ResponseEntity.ok(restTemplate.postForObject("https://jsonplaceholder.typicode.com/posts", user, Object.class));
     }
 
     @PostMapping("/users/error")
-    public ResponseEntity createUsersError(@RequestBody User user) {
+    public ResponseEntity createUsersError(@RequestBody Post user) {
         return ResponseEntity.ok(restTemplate.postForObject("https://jsonplaceholder.typicode.com/error", user, Object.class));
     }
 
     @PutMapping("/users")
-    public ResponseEntity updateUsers(@RequestBody User user) {
-        HttpEntity<User> requestUpdate = new HttpEntity<User>(user, new LinkedMultiValueMap());
-        return ResponseEntity.ok(restTemplate.exchange("https://jsonplaceholder.typicode.com/posts/1", HttpMethod.PUT, requestUpdate, User.class).getBody());
+    public ResponseEntity updateUsers(@RequestBody Post user) {
+        HttpEntity<Post> requestUpdate = new HttpEntity<Post>(user, new LinkedMultiValueMap());
+        return ResponseEntity.ok(restTemplate.exchange("https://jsonplaceholder.typicode.com/posts/1", HttpMethod.PUT, requestUpdate, Post.class).getBody());
     }
 
 }

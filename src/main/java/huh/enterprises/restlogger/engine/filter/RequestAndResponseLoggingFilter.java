@@ -2,7 +2,6 @@ package huh.enterprises.restlogger.engine.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -59,12 +58,13 @@ public class RequestAndResponseLoggingFilter extends OncePerRequestFilter {
     }
 
     protected void beforeRequest(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
-        logRequestHeader(request, request.getRemoteAddr() + "|>");
+        logFormatter.request(request);
+//        logRequestHeader(request, request.getRemoteAddr() + "|>");
     }
 
     protected void afterRequest(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
-        logRequestBody(request, request.getRemoteAddr() + "|>");
-        logResponse(request, response);
+        logRequestBody(request);
+        logFormatter.response(request, response);
     }
 
     private static void logRequestHeader(ContentCachingRequestWrapper request, String prefix) {
@@ -80,15 +80,11 @@ public class RequestAndResponseLoggingFilter extends OncePerRequestFilter {
         log.info("{}", prefix);
     }
 
-    private static void logRequestBody(ContentCachingRequestWrapper request, String prefix) {
+    private static void logRequestBody(ContentCachingRequestWrapper request) {
         var content = request.getContentAsByteArray();
         if (content.length > 0) {
             logContent(content, request.getContentType(), request.getCharacterEncoding());
         }
-    }
-
-    private void logResponse(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
-        logFormatter.logResponse(request, response);
     }
 
     private static void logContent(byte[] content, String contentType, String contentEncoding) {
