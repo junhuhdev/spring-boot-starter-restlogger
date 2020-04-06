@@ -52,12 +52,14 @@
         <appender-ref ref="APP"/>
     </logger>
 
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" additivity="true">
+        <appender-ref ref="RSPAYLOAD"/>
+    </logger>
+
 
     <logger name="PERFORMANCE" level="DEBUG" additivity="false">
         <appender-ref ref="PERFORMANCE"/>
     </logger>
-
-    <logger name="org.apache.http" level="DEBUG"/>
 
     <logger name="REST" level="TRACE" additivity="true">
         <appender-ref ref="RSPAYLOAD"/>
