@@ -1,6 +1,5 @@
 package huh.enterprises.restlogger.engine;
 
-import com.evry.finance.ebank.application.framework.log.aop.CustomObjectWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
