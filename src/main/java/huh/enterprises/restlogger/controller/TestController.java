@@ -24,8 +24,8 @@ public class TestController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity createUsers(@RequestBody Post user) {
-        return ResponseEntity.ok(restTemplate.postForObject("https://jsonplaceholder.typicode.com/posts", user, Object.class));
+    public ResponseEntity createUsers() {
+        return ResponseEntity.ok(restTemplate.postForObject("https://jsonplaceholder.typicode.com/posts", Post.builder().name("hello").build(), Object.class));
     }
 
     @PostMapping("/users/error")

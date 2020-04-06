@@ -81,7 +81,7 @@ public class RestLogServiceImpl implements RestLogService {
 
         }
         sb.append(newLine);
-        logger.trace(marker, sb.toString());
+        logger.info(marker, sb.toString());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class RestLogServiceImpl implements RestLogService {
                 sb.append(body);
             }
             sb.append(newLine);
-            logger.trace(marker, sb.toString());
+            logger.info(marker, sb.toString());
         } catch (IOException e) {
 
         }
@@ -134,7 +134,7 @@ public class RestLogServiceImpl implements RestLogService {
                 sb.append(body);
             }
             sb.append(newLine);
-            logger.trace(marker, sb.toString());
+            logger.info(marker, sb.toString());
         } catch (IOException e) {
 
         }
