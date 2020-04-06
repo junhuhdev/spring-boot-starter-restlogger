@@ -61,9 +61,9 @@
         <appender-ref ref="PERFORMANCE"/>
     </logger>
 
-    <logger name="REST" level="TRACE" additivity="true">
-        <appender-ref ref="RSPAYLOAD"/>
-    </logger>
+<!--    <logger name="REST" level="TRACE" additivity="true">-->
+<!--        <appender-ref ref="RSPAYLOAD"/>-->
+<!--    </logger>-->
 
 
     <!--    <logger name="org.zalando.logbook.Logbook" level="TRACE" additivity="false">-->

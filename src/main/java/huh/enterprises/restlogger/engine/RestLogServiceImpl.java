@@ -55,7 +55,7 @@ public class RestLogServiceImpl implements RestLogService {
 
         }
         sb.append(newLine);
-        logger.info(marker, sb.toString());
+        logger.trace(marker, sb.toString());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class RestLogServiceImpl implements RestLogService {
 
         }
         sb.append(newLine);
-        logger.info(marker, sb.toString());
+        logger.trace(marker, sb.toString());
     }
 
     @Override
@@ -106,7 +106,7 @@ public class RestLogServiceImpl implements RestLogService {
                 sb.append(body);
             }
             sb.append(newLine);
-            logger.info(marker, sb.toString());
+            logger.trace(marker, sb.toString());
         } catch (IOException e) {
 
         }
@@ -134,7 +134,7 @@ public class RestLogServiceImpl implements RestLogService {
                 sb.append(body);
             }
             sb.append(newLine);
-            logger.info(marker, sb.toString());
+            logger.trace(marker, sb.toString());
         } catch (IOException e) {
 
         }
@@ -165,7 +165,7 @@ public class RestLogServiceImpl implements RestLogService {
 
         }
         sb.append(newLine);
-        logger.info(marker, sb.toString());
+        logger.trace(marker, sb.toString());
     }
 
     private Map<String, String> buildParametersMap(HttpServletRequest httpServletRequest) {

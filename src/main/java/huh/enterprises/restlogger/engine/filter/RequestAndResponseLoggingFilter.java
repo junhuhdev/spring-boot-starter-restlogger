@@ -1,7 +1,7 @@
 package huh.enterprises.restlogger.engine.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -32,6 +32,13 @@ public class RequestAndResponseLoggingFilter extends OncePerRequestFilter {
             MediaType.valueOf("application/*+xml"),
             MediaType.MULTIPART_FORM_DATA);
 
+    private final LogFormatter logFormatter;
+
+    @Autowired
+    public RequestAndResponseLoggingFilter(LogFormatter logFormatter) {
+        this.logFormatter = logFormatter;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (isAsyncDispatch(request)) {
@@ -57,7 +64,7 @@ public class RequestAndResponseLoggingFilter extends OncePerRequestFilter {
 
     protected void afterRequest(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
         logRequestBody(request, request.getRemoteAddr() + "|>");
-        logResponse(response, request.getRemoteAddr() + "|<");
+        logResponse(request, response);
     }
 
     private static void logRequestHeader(ContentCachingRequestWrapper request, String prefix) {
@@ -76,35 +83,26 @@ public class RequestAndResponseLoggingFilter extends OncePerRequestFilter {
     private static void logRequestBody(ContentCachingRequestWrapper request, String prefix) {
         var content = request.getContentAsByteArray();
         if (content.length > 0) {
-            logContent(content, request.getContentType(), request.getCharacterEncoding(), prefix);
+            logContent(content, request.getContentType(), request.getCharacterEncoding());
         }
     }
 
-    private static void logResponse(ContentCachingResponseWrapper response, String prefix) {
-        var status = response.getStatus();
-        log.info("{} {} {}", prefix, status, HttpStatus.valueOf(status).getReasonPhrase());
-        response.getHeaderNames().forEach(headerName ->
-                response.getHeaders(headerName).forEach(headerValue ->
-                        log.info("{} {}: {}", prefix, headerName, headerValue)));
-        log.info("{}", prefix);
-        var content = response.getContentAsByteArray();
-        if (content.length > 0) {
-            logContent(content, response.getContentType(), response.getCharacterEncoding(), prefix);
-        }
+    private void logResponse(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response) {
+        logFormatter.logResponse(request, response);
     }
 
-    private static void logContent(byte[] content, String contentType, String contentEncoding, String prefix) {
+    private static void logContent(byte[] content, String contentType, String contentEncoding) {
         var mediaType = MediaType.valueOf(contentType);
         var visible = VISIBLE_TYPES.stream().anyMatch(visibleType -> visibleType.includes(mediaType));
         if (visible) {
             try {
                 var contentString = new String(content, contentEncoding);
-                Stream.of(contentString.split("\r\n|\r|\n")).forEach(line -> log.info("{} {}", prefix, line));
+                Stream.of(contentString.split("\r\n|\r|\n")).forEach(line -> log.info("{} ", line));
             } catch (UnsupportedEncodingException e) {
-                log.info("{} [{} bytes content]", prefix, content.length);
+                log.info("{}", content.length);
             }
         } else {
-            log.info("{} [{} bytes content]", prefix, content.length);
+            log.info("{} ", content.length);
         }
     }
 
