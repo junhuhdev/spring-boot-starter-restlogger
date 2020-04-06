@@ -1,20 +1,36 @@
 package huh.enterprises.restlogger.engine.filter;
 
+import huh.enterprises.restlogger.engine.CustomObjectWriter;
 import huh.enterprises.restlogger.engine.RestLogRequestType;
 import huh.enterprises.restlogger.engine.utils.HeaderFormatter;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
+import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Component
 @Slf4j(topic = "RequestAndResponseLoggingFilter")
 public class LogFormatter {
+    private static final List<MediaType> VISIBLE_TYPES = Arrays.asList(
+            MediaType.valueOf("text/*"),
+            MediaType.APPLICATION_FORM_URLENCODED,
+            MediaType.APPLICATION_JSON,
+            MediaType.APPLICATION_XML,
+            MediaType.valueOf("application/*+json"),
+            MediaType.valueOf("application/*+xml"),
+            MediaType.MULTIPART_FORM_DATA);
 
     public void request(ContentCachingRequestWrapper request) {
         try {
