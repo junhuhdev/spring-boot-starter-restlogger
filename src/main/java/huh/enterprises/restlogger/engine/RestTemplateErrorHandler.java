@@ -28,4 +28,8 @@ public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
         super.handleError(url, method, response);
     }
 
+    @Override
+    public void handleError(ClientHttpResponse response) throws IOException {
+        super.handleError(response);
+    }
 }
